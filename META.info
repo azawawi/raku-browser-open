@@ -6,5 +6,5 @@
 	"provides"    : {
 		"Browser::Open"         : "lib/Browser/Open.pm6"
 	},
-	"source-url"  : "git@github.com:azawawi/perl6-browser-open.git"
+	"source-url"  : "git://github.com/azawawi/perl6-browser-open.git"
 }
