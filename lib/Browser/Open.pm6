@@ -83,7 +83,11 @@ sub _check_all_cmds(Str $filter) returns Str
  
 sub _search_in_path(Str $cmd) returns Str
 {
-	for %*ENV<PATH>.split(':') -> $path
+	# TODO use File::Which once it is ported
+	my @paths = $*KERNEL.name eq 'win32'
+		?? %*ENV<Path>.split(';')
+		!! %*ENV<PATH>.split(':');
+	for @paths -> $path
 	{
 		next unless $path;
 		my Str $file = $*SPEC.catdir($path, $cmd);
