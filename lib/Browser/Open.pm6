@@ -1,5 +1,7 @@
 module Browser::Open;
 
+use NativeCall;
+
 my @known_commands =
 (
 	['', %*ENV<BROWSER>],
@@ -45,13 +47,38 @@ my @known_commands =
 	['',        'start'],
 );
 
-sub open_browser(Str $url, Bool $all = False) is export returns Proc::Status
+sub open_browser(Str $url, Bool $all = False) is export
 {
-	my $cmd = $all ?? (open_browser_cmd_all) !! (open_browser_cmd);
-	return unless $cmd;
+	if $*KERNEL.name eq 'win32'
+	{
+		# HINSTANCE ShellExecute(
+		#  _In_opt_  HWND hwnd,
+		#  _In_opt_  LPCTSTR lpOperation,
+		#  _In_      LPCTSTR lpFile,
+		#  _In_opt_  LPCTSTR lpParameters,
+		#  _In_opt_  LPCTSTR lpDirectory,
+		#  _In_      INT nShowCmd
+		# );
+		#
+		sub ShellExecuteA(
+			int32 $hwnd,
+			Str $operation,
+			Str $file,
+			Str $parameters,
+			Str $directory,
+			int32 $show_cmd
+		) returns int32 is native('shell32') { * }
 
-	my $proc = Proc::Async.new("$cmd", "$url");
-	return $proc.start;
+		ShellExecuteA(0, "open", $url, "", "", 1);
+	} else {
+		my $cmd = $all ?? (open_browser_cmd_all) !! (open_browser_cmd);
+		return unless $cmd;
+
+		my $proc = Proc::Async.new($cmd, $url);
+		$proc.start;
+	}
+
+	return;
 }
  
 sub open_browser_cmd is export returns Str
