@@ -45,24 +45,25 @@ my @known_commands =
 	['',        'start'],
 );
 
-sub open_browser(Str $url, Bool $all = False) is export
+sub open_browser(Str $url, Bool $all = False) is export returns Proc::Status
 {
 	my $cmd = $all ?? (open_browser_cmd_all) !! (open_browser_cmd);
 	return unless $cmd;
 
-	return shell("$cmd $url");
+	my $proc = Proc::Async.new("$cmd", "$url");
+	return $proc.start;
 }
  
-sub open_browser_cmd is export
+sub open_browser_cmd is export returns Str
 {
 	return _check_all_cmds($*KERNEL.name);
 }
  
-sub open_browser_cmd_all is export {
+sub open_browser_cmd_all is export returns Str {
 	return _check_all_cmds('');
 }
  
-sub _check_all_cmds(Str $filter)
+sub _check_all_cmds(Str $filter) returns Str
 {
 	for @known_commands -> $spec
 	{
@@ -80,12 +81,12 @@ sub _check_all_cmds(Str $filter)
 	return;
 }
  
-sub _search_in_path(Str $cmd)
+sub _search_in_path(Str $cmd) returns Str
 {
 	for %*ENV<PATH>.split(':') -> $path
 	{
 		next unless $path;
-		my $file = $*SPEC.catdir($path, $cmd);
+		my Str $file = $*SPEC.catdir($path, $cmd);
 		return $file if $file.IO ~~ :x;
 	}
 
