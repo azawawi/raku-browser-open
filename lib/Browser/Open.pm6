@@ -6,8 +6,6 @@ my @known_commands =
 (
 	['', %*ENV<BROWSER>],
 	['darwin',  '/usr/bin/open', 1],
-	['cygwin',  'start'],
-	['win32',   'start', Nil, 1],
 	['solaris', 'xdg-open'],
 	['solaris', 'firefox'],
 	['linux',   'sensible-browser'],
@@ -44,7 +42,6 @@ my @known_commands =
 	['freebsd', 'w3m'],
 	['freebsd', 'lynx'],
 	['',        'open'],
-	['',        'start'],
 );
 
 sub open_browser(Str $url, Bool $all = False) is export
