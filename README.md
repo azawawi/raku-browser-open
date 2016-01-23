@@ -13,7 +13,7 @@ $ panda install Browser::Open
 
 ## Synopsis
 
-```
+```Perl6
 use Browser::Open;
 
 my $ok = open_browser($url);
