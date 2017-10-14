@@ -70,7 +70,7 @@ sub open-browser(Str $url, Bool $all = False) is export
 
 		ShellExecuteA(0, "open", $url, "", "", 1);
 	} else {
-		my $cmd = $all ?? (open-browser-cmd_all) !! (open-browser-cmd);
+		my $cmd = $all ?? (open-browser-cmd-all) !! (open-browser-cmd);
 		return unless $cmd;
 
 		my $proc = Proc::Async.new($cmd, $url);
