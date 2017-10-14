@@ -3,7 +3,7 @@ unit module Browser::Open;
 use NativeCall;
 use File::Which;
 
-my @known_commands =
+my @known-commands =
 (
 	['', %*ENV<BROWSER>],
 	['darwin',  '/usr/bin/open', 1],
@@ -45,7 +45,7 @@ my @known_commands =
 	['',        'open'],
 );
 
-sub open_browser(Str $url, Bool $all = False) is export
+sub open-browser(Str $url, Bool $all = False) is export
 {
 	if $*KERNEL.name eq 'win32'
 	{
@@ -70,7 +70,7 @@ sub open_browser(Str $url, Bool $all = False) is export
 
 		ShellExecuteA(0, "open", $url, "", "", 1);
 	} else {
-		my $cmd = $all ?? (open_browser_cmd_all) !! (open_browser_cmd);
+		my $cmd = $all ?? (open-browser-cmd_all) !! (open-browser-cmd);
 		return unless $cmd;
 
 		my $proc = Proc::Async.new($cmd, $url);
@@ -80,18 +80,18 @@ sub open_browser(Str $url, Bool $all = False) is export
 	return;
 }
  
-sub open_browser_cmd is export returns Str
+sub open-browser-cmd is export returns Str
 {
-	return _check_all_cmds($*KERNEL.name);
+	return _check-all-cmds($*KERNEL.name);
 }
  
-sub open_browser_cmd_all is export returns Str {
-	return _check_all_cmds('');
+sub open-browser-cmd-all is export returns Str {
+	return _check-all-cmds('');
 }
  
-sub _check_all_cmds(Str $filter) returns Str
+sub _check-all-cmds(Str $filter) returns Str
 {
-	for @known_commands -> $spec
+	for @known-commands -> $spec
 	{
 		my ($osname, $cmd, $exact, $no_search) = @$spec;
 		next unless $cmd;
