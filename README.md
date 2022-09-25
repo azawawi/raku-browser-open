@@ -28,7 +28,19 @@ This module allow you to open URLs in a browser. A set of known browser commands
 per OS-name is tested for presence, and the first one found is executed. With an
 optional parameter, all known commands are checked.
 
+## Testing
 
+- To run tests:
+```
+$ prove --ext .rakutest -ve "raku -I."
+```
+
+- To run all tests including author tests (Please make sure
+[Test::Meta](https://github.com/jonathanstowe/Test-META) is installed):
+```
+$ zef install Test::META
+$ AUTHOR_TESTING=1 prove --ext .rakutest -ve "raku -I."
+```
 
 ## Author
 
