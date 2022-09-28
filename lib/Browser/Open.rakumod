@@ -45,7 +45,11 @@ my @known-commands =
     ['',        'open'],
 );
 
-sub open-browser(Str $url, Bool $all = False) is export
+multi sub open-browser(Str $url, Bool :$all = False) is export {
+  open-browser $url, $all
+}
+
+multi sub open-browser(Str $url, Bool $all) is export
 {
     if $*KERNEL.name eq 'win32'
     {
